@@ -1,0 +1,2 @@
+# azurefunction
+Azure function bindings

@@ -14,8 +14,8 @@ namespace AzureFunctionBindings
         }
 
         [Function(nameof(FunctionServiceBusTrigger))]
-        [BlobOutput("test-samples-output/{name}-output.txt")]
-        public string Run(
+        [BlobOutput("az204conatiner/test2.txt", Connection = "StorageConnection")]
+        public async Task<string> Run(
             [ServiceBusTrigger("TopicOrQueueName1", Connection = "ServiceBusConnection")]
             ServiceBusReceivedMessage message,
             ServiceBusMessageActions messageActions)
@@ -23,8 +23,9 @@ namespace AzureFunctionBindings
             _logger.LogInformation("Message ID: {id}", message.MessageId);
             _logger.LogInformation("Message Body: {body}", message.Body);
             _logger.LogInformation("Message Content-Type: {contentType}", message.ContentType);
+            await messageActions.CompleteMessageAsync(message);
 
-            return message.Body.ToString();
+            return message.Body.ToString();                ;
         }
     }
 }
